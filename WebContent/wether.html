@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>用AJAX以JSON方式获取数据</title>
+<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+</head>
+<body>
+
+
+	<div class="gradient" id="cl">
+		<button onclick="refreshWeather()">点击获取天气信息</button>
+	</div>
+
+	<script>
+		var city;
+		function refreshWeather() {
+			$.get({
+				url : "weather",
+				dataType : "json", //数据格式设置为jsonp
+				async : false,
+				success : function(data) {
+					city = data.city;
+				}
+			});
+
+			var url = encodeURI("http://wthrcdn.etouch.cn/weather_mini?city="
+					+ city);
+			$.get({
+				url : url,
+				dataType : "json",
+				async : false,
+				success : function(data) {
+					var todayWeather = data.data.forecast[0];
+
+					$("#cl").html(
+							city + "<br/>" + todayWeather.date + "<br/>"
+									+ todayWeather.high + ","
+									+ todayWeather.low + "<br/>"
+									+ todayWeather.type + "<br/>"
+
+									+ todayWeather.fengxiang);
+
+				}
+			});
+		}
+	</script>
+</body>
+
+</body>
+</html>
